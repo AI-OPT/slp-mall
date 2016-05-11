@@ -1,0 +1,4 @@
+rootProject.name = 'slp-mall'
+include 'mall-api'
+include 'mall-impl'
+
