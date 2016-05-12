@@ -46,7 +46,7 @@ project("mall-api") {
     }
 }
 
-project("mall-impl") {
+project("mall-core") {
     project.ext {
         moduleName = "mall-api"
     }
