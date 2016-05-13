@@ -1,62 +1,131 @@
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'maven-publish'
 
     ext {
+        profile=project.hasProperty('profile')? (project['profile']==""?"dev":project['profile']) : "dev"
         moduleVersion = "1.0-SNAPSHOT"
-        publishUserName = "devadm"
-        publishUserPassword = "Devadm@1212"
-        //publishURL="http://10.1.228.199:18081/nexus/content/repositories/releases/"
+        optBaseVersion = "1.0-SNAPSHOT"
+        builtBy = "gradle 2.2"
+        publishUserName = "runnerdev"
+        publishUserPassword = "runnerdev"
         publishURL = "http://10.1.228.199:18081/nexus/content/repositories/snapshots/"
-    }
 
+        mavenPublicURL = "http://10.1.228.199:18081/nexus/content/groups/public/"
+    }
     compileJava.dependsOn clean
     sourceCompatibility = 1.7
 
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    }
-    group = 'com.ai.slp'
-
+    configurations.all { resolutionStrategy.cacheChangingModulesFor 0, 'seconds' }
+    group="com.ai.slp.mall"
 }
+
 subprojects {
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-    repositories {
-        maven { url "http://10.1.228.199:18081/nexus/content/groups/public/" }
+    repositories { maven { url mavenPublicURL } }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs = [
+                        'src/main/java'
+                ]
+            }
+            resources { srcDirs = ['src/main/resources']}
+        }
+        test {
+            java {
+                srcDirs = [
+                        'src/test/java'
+                ]
+            }
+            resources { srcDirs = ['src/test/resources']}
+        }
     }
 
     dependencies {
-        testCompile group: 'junit', name: 'junit', version: '4.11'
-        compile 'org.apache.logging.log4j:log4j-core:2.5'
+        compile "com.ai.opt:opt-base:${optBaseVersion}"
+        compile 'org.jboss.resteasy:resteasy-jaxrs:3.0.11.Final'
+        compile 'org.jboss.resteasy:resteasy-client:3.0.11.Final'
+        compile 'org.jboss.resteasy:resteasy-jackson-provider:3.0.11.Final'
+        compile 'org.mortbay.jetty:jetty:6.1.26'
+        compile 'com.ai.opt.validator:opt-validator:1.0.1'
     }
 }
 
 project("mall-api") {
     project.ext {
-        moduleName = "mall-api"
+        appName = "mall-api"
+        apiDir =  "src/main/java/com/ai/slp/mall/api/"
     }
 
     jar {
-        baseName moduleName
+        baseName appName
         version moduleVersion
-        include 'com/ai/slp/**'
         manifest {
-            attributes 'packageName': moduleName, 'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
+            attributes 'packageName': appName, 'Built-By': builtBy, 'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
         }
     }
+    publish.dependsOn build
 }
 
 project("mall-core") {
-    project.ext {
-        moduleName = "mall-api"
-    }
+    project.ext { appName = "mall-core" }
 
     jar {
-        baseName moduleName
+        baseName appName
         version moduleVersion
-        include 'com/ai/slp/**'
+        include "com/ai/slp/mall/*/**"
         manifest {
-            attributes 'packageName': moduleName, 'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
+            attributes 'packageName': appName, 'Built-By': builtBy, 'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
         }
     }
 }
+
+jar {
+    baseName baseName
+    version moduleVersion
+    destinationDir file("$buildDir/m-libs/")
+    manifest {
+        attributes 'packageName': baseName, 'Built-By': builtBy, 'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
+    }
+}
+
+configure(subprojects) { subproject ->
+    task sourcesJar(type: Jar, dependsOn:classes) { from sourceSets.main.output }
+    artifacts { archives sourcesJar }
+}
+task copySubProjectsJar(type: Copy) {
+    subprojects.each { subproject ->
+        from subproject.jar
+        destinationDir file("$buildDir/libs/core-libs")
+    }
+}
+task copy3rdJars(type: Copy) {
+    subprojects.each { subproject ->
+        from subproject.configurations.runtime
+        destinationDir file("$buildDir/libs/3rd-libs")
+    }
+}
+
+task copySubProjectsConfig(type: Copy) {
+    subprojects.each { subproject ->
+        from subproject.fileTree(dir: 'src/main/resources')+subproject.fileTree(dir: 'profile/'+profile)
+        destinationDir file("$buildDir/config")
+    }
+}
+
+task zipLibs(type: Zip) {
+    baseName "libs"
+    from "$buildDir/libs"
+}
+
+task zipConfig(type: Zip) {
+    baseName "config"
+    from "$buildDir/config"
+}
+
+
+build.dependsOn copySubProjectsJar,copy3rdJars,copySubProjectsConfig
