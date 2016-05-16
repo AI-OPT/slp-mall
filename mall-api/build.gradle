@@ -8,7 +8,8 @@ configurations {
 
 dependencies {
     jaxDoclet 'com.ai.runner.plugin:apicollector:2.0-SNAPSHOT'
-    optBaseSource "com.ai.opt:opt-base:1.0-SNAPSHOT:sources"
+    optBaseSource "com.ai.opt:opt-base:1.0.1-SNAPSHOT:sources"
+    compile "org.hibernate:hibernate-validator:4.2.0.Final"
 }
 
 
