@@ -5,24 +5,32 @@ import com.ai.opt.base.vo.BaseResponse;
 import java.util.List;
 
 /**
- * 购物车商品批量删除结果
+ * 购物车商品操作结果
  *
  * Date: 2016年5月16日 <br>
  * Copyright (c) 2016 asiainfo.com <br>
  *
  * @author liutong5
  */
-public class MultiProdDelRes extends BaseResponse {
+public class CartProdOptRes extends BaseResponse {
     /**
-     * 删除商品总数
+     * 购物车里商品数
+     */
+    private Long prodNum;
+    /**
+     * 购物车里商品的总数量
+     */
+    private Long prodTotal;
+    /**
+     * 删除商品总数,删除操作返回信息
      */
     private int delProdTotal;
     /**
-     * 删除成功数量
+     * 删除成功数量,删除操作返回信息
      */
     private int delSuccessNum;
     /**
-     * 删除失败商品标识集合
+     * 删除失败商品标识集合,删除操作返回信息
      */
     private List<String> failProdIdList;
 
@@ -48,5 +56,21 @@ public class MultiProdDelRes extends BaseResponse {
 
     public void setFailProdIdList(List<String> failProdIdList) {
         this.failProdIdList = failProdIdList;
+    }
+
+    public Long getProdNum() {
+        return prodNum;
+    }
+
+    public void setProdNum(Long prodNum) {
+        this.prodNum = prodNum;
+    }
+
+    public Long getProdTotal() {
+        return prodTotal;
+    }
+
+    public void setProdTotal(Long prodTotal) {
+        this.prodTotal = prodTotal;
     }
 }

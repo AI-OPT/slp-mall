@@ -26,12 +26,12 @@ public interface IShopCartSV {
      * @author liutng5
      * @ApiCode SHOP_CART_0100
      */
-    public BaseResponse addProd(CartProd cartProd)
+    public CartProdOptRes addProd(CartProd cartProd)
         throws BusinessException,SystemException;
     @interface AddProd{}
 
     /**
-     * 查询用户的购物车信息
+     * 查询用户的购物车详细信息
      *
      * @param userInfo 用户信息
      * @return
@@ -53,7 +53,7 @@ public interface IShopCartSV {
      * @author liutng5
      * @ApiCode SHOP_CART_0102
      */
-    public BaseResponse updateProdNum(CartProd cartProd) throws BusinessException,SystemException;
+    public CartProdOptRes updateProdNum(CartProd cartProd) throws BusinessException,SystemException;
     @interface UpdateProdNum{}
 
     /**
@@ -66,6 +66,18 @@ public interface IShopCartSV {
      * @author liutng5
      * @ApiCode SHOP_CART_0103
      */
-    public MultiProdDelRes deleteMultiProd(MultiCartProd multiCartProd)throws BusinessException,SystemException;
+    public CartProdOptRes deleteMultiProd(MultiCartProd multiCartProd)throws BusinessException,SystemException;
     @interface DeleteMultiProd{}
+
+    /**
+     * 查询用户的购物车概况信息
+     *
+     * @param userInfo 用户信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutng5
+     * @ApiCode SHOP_CART_0104
+     */
+    public CartProdOptRes queryPointsOfCart(UserInfo userInfo)throws BusinessException,SystemException;
 }

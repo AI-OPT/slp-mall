@@ -33,5 +33,29 @@ public class CartProd extends BaseInfo {
     @NotNull(message = "数量不能为空")
     @Min(value = 1,message = "商品数量不能小于1")
     private Long buyNum;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(String skuId) {
+        this.skuId = skuId;
+    }
+
+    public Long getBuyNum() {
+        return buyNum;
+    }
+
+    public void setBuyNum(Long buyNum) {
+        this.buyNum = buyNum;
+    }
 }
 

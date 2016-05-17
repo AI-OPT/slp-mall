@@ -26,7 +26,7 @@ public class IShopCartSVImpl implements IShopCartSV {
      * @ApiCode SHOP_CART_0100
      */
     @Override
-    public BaseResponse addProd(CartProd cartProd) throws BusinessException, SystemException {
+    public CartProdOptRes addProd(CartProd cartProd) throws BusinessException, SystemException {
         return null;
     }
 
@@ -56,7 +56,7 @@ public class IShopCartSVImpl implements IShopCartSV {
      * @ApiCode SHOP_CART_0102
      */
     @Override
-    public BaseResponse updateProdNum(CartProd cartProd) throws BusinessException, SystemException {
+    public CartProdOptRes updateProdNum(CartProd cartProd) throws BusinessException, SystemException {
         return null;
     }
 
@@ -71,7 +71,22 @@ public class IShopCartSVImpl implements IShopCartSV {
      * @ApiCode SHOP_CART_0103
      */
     @Override
-    public MultiProdDelRes deleteMultiProd(MultiCartProd multiCartProd) throws BusinessException, SystemException {
+    public CartProdOptRes deleteMultiProd(MultiCartProd multiCartProd) throws BusinessException, SystemException {
+        return null;
+    }
+
+    /**
+     * 查询用户的购物车概况信息
+     *
+     * @param userInfo 用户信息
+     * @return
+     * @throws BusinessException
+     * @throws SystemException
+     * @author liutng5
+     * @ApiCode SHOP_CART_0104
+     */
+    @Override
+    public CartProdOptRes queryPointsOfCart(UserInfo userInfo) throws BusinessException, SystemException {
         return null;
     }
 }
